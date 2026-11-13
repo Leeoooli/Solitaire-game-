@@ -23,7 +23,7 @@ body{background:var(--felt);color:var(--paper);font-family:var(--body);font-weig
   -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-#app{max-width:540px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;gap:14px;
+#app{max-width:540px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;gap:12px;
   padding-block:12px 16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   container-type:inline-size;--n:4;--gap:8px}
 #app > *{--cw:min(98px,calc((100cqw - (var(--n) - 1) * var(--gap)) / var(--n)))}
@@ -42,9 +42,15 @@ header{display:flex;align-items:center;gap:10px}
   linear-gradient(315deg,var(--blue) 25%,transparent 25%) 0 0/6px 6px,
   linear-gradient(45deg,var(--blue) 25%,transparent 25%) 0 0/6px 6px,var(--blue-lite);box-shadow:0 0 0 1.5px var(--paper) inset}
 
-#turn{border-radius:12px;background:var(--felt-ink);padding:8px 12px;font-size:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-#turn.mine{background:var(--gold);color:#3a2800}
-#turn .who{font-weight:700}
+#turn{display:flex;align-items:stretch;gap:8px}
+.pl{flex:1 1 0;min-width:0;background:var(--felt-ink);border-radius:12px;padding:6px 10px;display:flex;flex-direction:column;line-height:1.3}
+.pl b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl span{font-size:12px;opacity:.85;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pl.on{background:var(--gold);color:#3a2800}
+.mid{flex:1.5 1 0;min-width:0;display:flex;flex-direction:column;justify-content:center;text-align:center;font-size:12px;line-height:1.35}
+.mid b{font-size:13.5px}
+#chatBtn{flex:none;width:42px;border-radius:12px;background:var(--felt-ink);font-size:18px;position:relative}
+#chatBtn i{position:absolute;right:-4px;top:-4px;min-width:18px;height:18px;border-radius:9px;background:var(--rose);color:#fff;font-size:11px;font-style:normal;line-height:18px;text-align:center}
 
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .ribbon{background:var(--felt-lite);color:var(--felt-ink);padding:8px 14px 22px;text-align:center;min-width:82px;
@@ -73,14 +79,13 @@ header{display:flex;align-items:center;gap:10px}
   linear-gradient(45deg,var(--blue) 25%,transparent 25%) 0 0/16px 16px,var(--blue-lite);
   box-shadow:0 0 0 3px var(--paper) inset,0 2px 3px rgba(0,0,0,.22)}
 .col .card.back:not(:last-child){margin-bottom:calc(var(--cw)*-1.27)}
-.col .card.under{margin-bottom:calc(var(--cw)*-1.04);justify-content:flex-start;padding-top:calc(var(--cw)*.075)}
+.col .card.under{margin-bottom:calc(var(--cw)*-1.06);justify-content:flex-start;padding-top:calc(var(--cw)*.07)}
 .card .lab{white-space:nowrap;line-height:1.15;font-weight:500}
-.l1,.l2{font-size:calc(var(--cw)*.27)} .l3{font-size:calc(var(--cw)*.235)} .l4{font-size:calc(var(--cw)*.2)} .l5{font-size:calc(var(--cw)*.16)}
-.card .emo{font-family:var(--emoji);font-size:calc(var(--cw)*.46);line-height:1.1}
-.card .emo + .lab{font-size:calc(var(--cw)*.165)}
+.l1{font-size:calc(var(--cw)*.4)} .l2{font-size:calc(var(--cw)*.27)} .l3{font-size:calc(var(--cw)*.235)} .l4{font-size:calc(var(--cw)*.2)} .l5{font-size:calc(var(--cw)*.16)}
+.card .emo{font-family:var(--emoji);font-size:calc(var(--cw)*.52);line-height:1.1}
 .card.under .lab{font-size:calc(var(--cw)*.17)}
 .card.under .emo{font-size:calc(var(--cw)*.2)}
-.card.cat{box-shadow:0 0 0 3px var(--gold) inset,0 2px 3px rgba(0,0,0,.22);background:#fff8e3}
+.card.cat{box-shadow:0 0 0 3px var(--gold) inset,0 2px 3px rgba(0,0,0,.22);background:#fff3cc}
 .card.cat .lab{font-weight:700}
 .crown{position:absolute;left:calc(var(--cw)*.08);top:calc(var(--cw)*.03);font-size:calc(var(--cw)*.19);color:var(--gold-deep);line-height:1.2}
 .card.drag{z-index:60;pointer-events:none;cursor:grabbing;box-shadow:0 0 0 1.5px var(--paper-edge) inset,0 10px 18px rgba(0,0,0,.35)}
@@ -95,13 +100,12 @@ header{display:flex;align-items:center;gap:10px}
 
 .slot,.ghost{background:rgba(15,68,36,.38);box-shadow:0 0 0 2px rgba(15,68,36,.25) inset;display:grid;place-items:center;color:var(--felt-lite)}
 .slot .big{font-size:calc(var(--cw)*.5);line-height:1}
-.slot.full{background:#fff8e3;color:var(--ink);box-shadow:0 0 0 3px var(--gold) inset,0 2px 3px rgba(0,0,0,.22);
+.slot.full{background:#fff3cc;color:var(--ink);box-shadow:0 0 0 3px var(--gold) inset,0 2px 3px rgba(0,0,0,.22);
   display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:visible}
 .slot .tag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:#3a2800;font-size:12px;font-weight:700;
   padding:1px 7px;border-radius:5px;white-space:nowrap;max-width:118%;line-height:1.35}
 .slot .cnt{position:absolute;right:calc(var(--cw)*.09);top:calc(var(--cw)*.06);font-size:calc(var(--cw)*.15);color:var(--ink-soft);font-variant-numeric:tabular-nums}
-.slot .emo{font-family:var(--emoji);font-size:calc(var(--cw)*.46);line-height:1.1}
-.slot .emo + .lab{font-size:calc(var(--cw)*.165)}
+.slot .emo{font-family:var(--emoji);font-size:calc(var(--cw)*.5);line-height:1.1}
 .slot .lab{white-space:nowrap}
 .slot .wait{font-size:calc(var(--cw)*.15);color:var(--ink-soft)}
 #stock{position:relative;cursor:pointer}
@@ -116,7 +120,7 @@ footer button:hover{background:#0b3a1e}
 footer button:disabled{opacity:.4;cursor:default}
 
 #toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:rgba(20,30,24,.94);color:#fff;
-  padding:9px 16px;border-radius:99px;font-size:14px;max-width:calc(100% - 40px);text-align:center;pointer-events:none;z-index:70;transition:opacity .2s}
+  padding:9px 16px;border-radius:99px;font-size:14px;max-width:calc(100% - 40px);text-align:center;pointer-events:none;z-index:90;transition:opacity .2s}
 #toast.off{opacity:0}
 
 .scrim{position:fixed;inset:0;background:rgba(8,30,16,.62);z-index:80;display:flex;align-items:flex-end;justify-content:center}
@@ -132,19 +136,35 @@ footer button:disabled{opacity:.4;cursor:default}
 .chip{background:#ece8da;border-radius:12px;padding:9px 6px;text-align:center;font-size:15px;font-weight:700;display:flex;flex-direction:column;gap:2px}
 .chip small{font-weight:500;font-size:11.5px;color:var(--ink-soft)}
 .chip.on{background:var(--felt);color:#fff}.chip.on small{color:#dff5e7}
-.levels .chip{font-family:var(--display);font-weight:400;font-size:19px;padding:7px 2px;gap:0}.levels .chip small{min-height:1.3em}
+.levels .chip{font-family:var(--display);font-weight:400;font-size:19px;padding:6px 2px;gap:0}.levels .chip small{min-height:1.3em}
 .modes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.online{background:#ece8da;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.55}
-.online .line{display:flex;gap:8px;flex-wrap:wrap}
-.online input{flex:1;min-width:0;font:inherit;font-size:18px;letter-spacing:.25em;text-align:center;border:2px solid var(--paper-edge);border-radius:10px;padding:7px;background:#fff;color:var(--ink)}
+.box{background:#ece8da;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.55}
+.box .line{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.box input,#chatIn{flex:1;min-width:0;font:inherit;font-size:16px;border:2px solid var(--paper-edge);border-radius:10px;padding:7px 10px;background:#fff;color:var(--ink)}
+#roomCode{font-size:18px;letter-spacing:.25em;text-align:center}
+.stepper{display:flex;align-items:center;gap:4px}
+.stepper button{width:36px;height:36px;border-radius:10px;background:#fff;font-size:20px;font-weight:700;box-shadow:0 0 0 1.5px var(--paper-edge) inset}
+.stepper b{min-width:28px;text-align:center;font-family:var(--display);font-weight:400;font-size:22px}
 .btn{background:var(--felt);color:#fff;border-radius:12px;padding:10px 16px;font-weight:700;font-size:15px}
 .btn.alt{background:#ece8da;color:var(--ink)}
+.box .btn.alt{background:#fff;box-shadow:0 0 0 1.5px var(--paper-edge) inset}
 .btn.warn{background:#fff;color:var(--rose);box-shadow:0 0 0 1.5px var(--rose) inset}
 .code{font-family:var(--display);font-size:34px;letter-spacing:.18em;color:var(--felt-deep);line-height:1}
+#inviteUrl{font-size:12px;word-break:break-all;background:#fff;border-radius:8px;padding:6px 8px}
 .rules{margin:0;padding-left:1.2em;font-size:14px;line-height:1.7;color:var(--ink)}
 #over h2{justify-content:center;font-size:30px}
 #over p{margin:0;font-size:15px;color:var(--ink-soft);line-height:1.6}
 #over .acts{display:flex;flex-direction:column;gap:8px}
+#chatLog{min-height:150px;max-height:42vh;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.msg{align-self:flex-start;max-width:82%}
+.msg small{font-size:11px;color:var(--ink-soft)}
+.msg span{display:block;background:#ece8da;border-radius:14px;padding:7px 12px;font-size:15px;word-break:break-word}
+.msg.me{align-self:flex-end;text-align:right}
+.msg.me span{background:var(--felt);color:#fff;text-align:left}
+#chatLog .none{margin:auto;color:var(--ink-soft);font-size:14px;text-align:center}
+.quick{display:flex;gap:6px;flex-wrap:wrap}
+.quick button{background:#ece8da;border-radius:99px;padding:5px 12px;font-size:13px}
+#chatForm{display:flex;gap:8px}
 </style>
 
 </head>
@@ -170,73 +190,99 @@ footer button:disabled{opacity:.4;cursor:default}
   </footer>
 </div>
 <div id="sheet" class="scrim" hidden><div class="panel" id="sheetBody"></div></div>
+<div id="chat" class="scrim" hidden><div class="panel">
+  <h2>聊天<button class="x" id="chatClose" aria-label="关闭">✕</button></h2>
+  <div id="chatLog"></div>
+  <div class="quick" id="chatQuick"></div>
+  <form id="chatForm"><input id="chatIn" maxlength="80" placeholder="说点什么…" autocomplete="off" aria-label="消息"><button class="btn">发送</button></form>
+</div></div>
 <div id="over" class="scrim" hidden><div class="panel" id="overBody"></div></div>
 <div id="toast" class="off" role="status"></div>
 
 <script>
-/* ---------- 词库 ---------- */
+/* ---------- 词库：同一个词可以出现在两个类别里（多义词），一副牌里它只属于其中一个 ---------- */
 const BANK=[
-['交通工具','飞机✈️ 火车🚆 轮船🚢 自行车🚲 公交车🚌 地铁🚇 出租车🚕 摩托车🏍️'],
-['水果','苹果🍎 香蕉🍌 葡萄🍇 西瓜🍉 草莓🍓 桃子🍑 菠萝🍍 樱桃🍒'],
-['蔬菜','胡萝卜🥕 西兰花🥦 茄子🍆 玉米🌽 土豆🥔 黄瓜🥒 辣椒🌶️ 洋葱🧅'],
-['动物园','老虎🐯 狮子🦁 大象🐘 长颈鹿🦒 熊猫🐼 猴子🐒 斑马🦓 袋鼠🦘'],
-['海洋生物','鲸鱼🐳 海豚🐬 章鱼🐙 鲨鱼🦈 螃蟹🦀 龙虾🦞 乌贼🦑 海龟🐢'],
-['乐器','钢琴🎹 吉他🎸 小提琴🎻 鼓🥁 萨克斯🎷 小号🎺 二胡 笛子'],
-['天气','晴天☀️ 下雨🌧️ 下雪❄️ 彩虹🌈 闪电⚡ 龙卷风🌪️ 大雾 冰雹'],
-['颜色','红色 蓝色 绿色 黄色 紫色 橙色 黑色 白色'],
-['身体部位','眼睛👁️ 耳朵👂 鼻子👃 嘴巴👄 手掌✋ 脚🦶 牙齿🦷 大脑🧠'],
-['扑克牌','红心♥️ 方块♦️ 梅花♣️ 黑桃♠️ 大王 小王 同花顺 洗牌'],
-['早餐','豆浆 油条 包子 煎饼 白粥 馒头 煎蛋🍳 面包🍞'],
-['学科','数学 语文 物理 化学 生物 历史 地理 英语'],
-['服装','裤子👖 衬衫👔 裙子👗 外套🧥 袜子🧦 帽子🧢 围巾🧣 手套🧤'],
-['运动','足球⚽ 篮球🏀 网球🎾 乒乓球🏓 羽毛球🏸 游泳🏊 滑雪⛷️ 排球🏐'],
-['职业','医生 教师 警察 厨师 律师 记者 司机 护士'],
-['家具','沙发🛋️ 床🛏️ 椅子🪑 桌子 衣柜 书架 茶几 鞋柜'],
-['文具','铅笔✏️ 橡皮 尺子📏 剪刀✂️ 笔记本📓 胶水 回形针📎 钢笔🖊️'],
-['节日','春节 中秋节 端午节 元宵节 清明节 国庆节 重阳节 七夕'],
-['餐具','菜刀🔪 筷子🥢 勺子🥄 铁锅 饭碗🥣 盘子🍽️ 叉子🍴 砧板'],
-['太空','月亮🌙 地球🌍 火星 彗星☄️ 火箭🚀 卫星🛰️ 宇航员🧑‍🚀 银河'],
-['饮料','绿茶🍵 咖啡☕ 果汁🧃 可乐🥤 啤酒🍺 红酒🍷 奶茶🧋 矿泉水'],
-['花','玫瑰🌹 向日葵🌻 郁金香🌷 樱花🌸 荷花🪷 菊花 牡丹 茉莉'],
-['电器','电视📺 冰箱 洗衣机 空调 电脑💻 手机📱 微波炉 吹风机'],
-['昆虫','蝴蝶🦋 蜜蜂🐝 蚂蚁🐜 瓢虫🐞 蜻蜓 蚊子🦟 蟋蟀🦗 蟑螂🪳'],
-['城市','北京 上海 广州 深圳 成都 杭州 西安 南京'],
-['甜点','蛋糕🍰 冰淇淋🍦 巧克力🍫 饼干🍪 甜甜圈🍩 布丁🍮 糖果🍬 棉花糖'],
+['水果','苹果 香蕉🍌 葡萄🍇 西瓜🍉 草莓🍓 桃子🍑 菠萝🍍 樱桃🍒 芒果🥭 柠檬🍋 黑莓'],
+['手机品牌','苹果 小米 华为 三星 荣耀 魅族 锤子 黑莓 联想 中兴'],
+['粮食','小米 大米 小麦 玉米 高粱 燕麦 黄豆 红豆 绿豆 荞麦'],
+['工具','锤子 扳手🔧 钳子 螺丝刀🪛 电钻 锯子🪚 斧头🪓 卷尺 梯子🪜 铲子'],
+['蔬菜','胡萝卜🥕 西兰花🥦 茄子🍆 玉米 土豆🥔 黄瓜🥒 辣椒 洋葱🧅 白菜🥬 菠菜 蘑菇🍄'],
+['调味料','食盐🧂 白糖 陈醋 酱油 辣椒 花椒 八角 生姜 大蒜🧄 香油'],
+['花','玫瑰🌹 向日葵🌻 郁金香🌷 樱花🌸 荷花 菊花 牡丹 茉莉 梅花 杜鹃 百合'],
+['鸟','杜鹃 喜鹊 麻雀 燕子 老鹰🦅 鸽子🕊️ 孔雀🦚 企鹅🐧 天鹅🦢 乌鸦 鹦鹉🦜'],
+['茶','龙井 普洱 铁观音 碧螺春 大红袍 毛尖 乌龙 菊花 茉莉 绿茶'],
+['饮料','绿茶 咖啡☕ 果汁🧃 可乐🥤 啤酒🍺 红酒🍷 奶茶🧋 矿泉水 豆浆 酸奶'],
+['早餐','豆浆 油条 包子 煎饼 白粥 馒头 煎蛋🍳 面包🍞 烧饼 小笼包'],
+['扑克牌','红心♥️ 方块♦️ 梅花 黑桃♠️ 大王 小王 同花顺 顺子 炸弹 对子'],
+['象棋','车 马 炮 兵 卒 将 帅 相 士 象'],
+['生肖','鼠 牛 虎 兔 龙 蛇 马 羊 猴 鸡 狗 猪'],
+['姓氏','王 李 张 刘 陈 杨 黄 白 马 金 周'],
+['颜色','红 橙 黄 绿 青 蓝 紫 黑 白 灰'],
+['金属','金 银 铜 铁 锡 铝 锌 铅 钛 镍'],
+['方向','东 南 西 北 上 下 左 右 前 后 中'],
+['麻将','东 南 西 北 中 发 白 筒 条 万'],
+['朝代','唐 宋 元 明 清 汉 秦 隋 晋 周'],
+['太阳系','太阳 水星 金星 地球🌍 火星 木星 土星 天王星 海王星 月球🌙'],
+['节气','立春 雨水 惊蛰 春分 清明 谷雨 芒种 夏至 白露 霜降 大雪 冬至'],
+['节日','春节 中秋 端午 元宵 清明 国庆 重阳 七夕 除夕 元旦'],
+['天气','晴天☀️ 阴天☁️ 暴雨🌧️ 大雪 彩虹🌈 闪电⚡ 台风🌀 冰雹 大雾 龙卷风🌪️'],
+['省份','黑龙江 吉林 山东 四川 云南 海南 浙江 广东 河南 湖南'],
+['江河','长江 黄河 珠江 黑龙江 淮河 松花江 澜沧江 嘉陵江 汉江 钱塘江'],
+['城市','北京 上海 广州 深圳 成都 杭州 西安 南京 吉林 重庆 武汉'],
+['星座','白羊 金牛 双子 巨蟹 狮子 处女 天秤 天蝎 射手 摩羯 水瓶 双鱼'],
+['动物园','老虎🐯 狮子 大象🐘 长颈鹿🦒 熊猫🐼 猴子🐒 斑马🦓 袋鼠🦘 河马🦛 骆驼🐫'],
+['海洋生物','鲸鱼🐳 海豚🐬 章鱼🐙 鲨鱼🦈 螃蟹🦀 龙虾🦞 乌贼🦑 海龟🐢 水母 海星'],
+['乐器','钢琴🎹 吉他🎸 小提琴🎻 鼓🥁 萨克斯🎷 小号🎺 二胡 笛子 古筝 琵琶'],
+['身体部位','眼睛👁️ 耳朵👂 鼻子👃 嘴巴👄 手掌✋ 脚🦶 牙齿🦷 大脑🧠 心脏 骨头🦴'],
+['服装','裤子👖 衬衫👔 裙子👗 外套🧥 袜子🧦 帽子🧢 围巾🧣 手套🧤 毛衣 短裤🩳'],
+['运动','足球⚽ 篮球🏀 网球🎾 乒乓球🏓 羽毛球🏸 游泳🏊 滑雪⛷️ 排球🏐 拳击🥊 射箭🏹'],
+['职业','医生 教师 警察 厨师 律师 记者 司机 护士 会计 木匠'],
+['家具','沙发🛋️ 床🛏️ 椅子🪑 桌子 衣柜 书架 茶几 鞋柜 镜子🪞 屏风'],
+['文具','铅笔✏️ 橡皮 尺子📏 剪刀✂️ 笔记本 胶水 回形针📎 钢笔🖊️ 圆规 书包🎒'],
+['餐具','菜刀🔪 筷子🥢 勺子🥄 铁锅 饭碗🥣 盘子🍽️ 叉子🍴 砧板 茶杯 蒸笼'],
+['电器','电视📺 冰箱 洗衣机 空调 电脑💻 手机📱 微波炉 吹风机 风扇 笔记本'],
+['昆虫','蝴蝶🦋 蜜蜂🐝 蚂蚁🐜 瓢虫🐞 蜻蜓 蚊子🦟 蟋蟀🦗 蟑螂🪳 知了 萤火虫'],
+['甜点','蛋糕🍰 冰淇淋🍦 巧克力🍫 饼干🍪 甜甜圈🍩 布丁🍮 糖果🍬 棉花糖 月饼🥮 汤圆'],
+['交通工具','飞机✈️ 火车🚆 轮船🚢 自行车🚲 公交车🚌 地铁🚇 出租车🚕 摩托车🏍️ 卡车🚚 直升机🚁'],
+['学科','数学 语文 物理 化学 生物 历史 地理 英语 音乐 美术'],
 ].map(([name,s])=>({name,words:s.split(' ').map(x=>{const m=x.match(/^([一-鿿]+)(.*)$/);return{t:m[1],e:m[2]}})}));
+const TC={};BANK.forEach((c,i)=>c.words.forEach(w=>(TC[w.t]=TC[w.t]||[]).push(i)));
+const LINK=BANK.map(()=>new Set());for(const t in TC)if(TC[t].length>1)for(const a of TC[t])for(const b of TC[t])if(a!==b)LINK[a].add(b);
 
-/* 关卡：类别数、每类词数、牌列数、空位数、首列盖牌数、比最优解多给的步数比例、是否看图 */
-const LV=Array.from({length:36},(_,i)=>({name:`第 ${i+1} 关`,cats:4+Math.floor(i*8/35),k:3+Math.round(i*4/35),cols:i<4?3:i<22?4:5,slots:i<8?3:4,base:i<8?2:3,
-  slack:.5-i*.012,pic:i>=18?1:0,rate:Math.max(.03,.5-i*.015)}));
+/* 60 关：类别从 4 个加到 12 个，每类词语从 3 张加到 8 张，多义词从第 9 关开始出现，步数余量从 15% 收到 2% */
+const LV=Array.from({length:60},(_,i)=>({name:`第 ${i+1} 关`,cats:Math.min(12,4+Math.floor(i/6)),k:Math.min(8,3+Math.floor((i+5)/10)),
+  cols:i<6?3:i<30?4:5,slots:i<12?3:4,base:i<10?2:3,slack:.15-.13*i/59,amb:i<8?0:1+Math.floor((i-8)/7),rate:Math.max(.02,.4-i*.01)}));
 
 /* ---------- 规则（纯逻辑） ---------- */
-const catOf=c=>Math.floor(c/10), isCat=c=>c%10===0;
-const wordOf=c=>isCat(c)?BANK[catOf(c)].name:BANK[catOf(c)].words[c%10-1].t;
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+const catOf=c=>Math.floor(c/100), isCat=c=>c%100===0;
+const wordOf=c=>BANK[catOf(c)].words[c%100-1];
+function rngOf(seed){let a=seed>>>0;return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function shuffle(a,r){for(let i=a.length-1;i>0;i--){const j=r()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
 function mkState(d){return{k:d.k,total:d.cats,cols:d.cols.map(a=>({down:a.slice(0,-1),up:a.slice(-1)})),stock:d.stock.slice(),waste:[],
-  found:Array(d.slots).fill(null),done:0,left:d.limit,used:0,justDone:null,hitSlot:-1}}
-/* 皇冠牌只能进空位，或者盖在同类词语上；盖上之后那一叠就锁住，只能整叠拖进空位。 */
+  found:Array(d.slots).fill(null),done:0,left:d.limit,used:0,hitSlot:-1,gain:0}}
+/* 牌列里同类的牌叠在一起后整叠移动。金色类别牌只能进空位，或盖在同类词语上；盖上后这一叠不能再加牌，只能整叠进空位。 */
 function apply(S,ms){
-  S.justDone=null;S.hitSlot=-1;
+  ms=String(ms).split('@')[0];S.hitSlot=-1;S.gain=0;
   if(ms==='d'){
     if(!S.stock.length){if(!S.waste.length)return false;S.stock=S.waste.reverse();S.waste=[]}
     S.waste.push(S.stock.pop());S.left--;S.used++;return true}
-  const p=String(ms).split(':'),src=+p[1],i=+p[2],dst=+p[3];
-  if(p[0]!=='m'||![src,i,dst].every(Number.isInteger))return false;
+  const p=ms.split(':'),src=+p[1],dst=+p[3];
+  if(p[0]!=='m'||![src,dst].every(Number.isInteger))return false;
   let cards;
   if(src<0){if(!S.waste.length)return false;cards=[S.waste.at(-1)]}
-  else{const c=S.cols[src];if(!c||i<0||i>=c.up.length)return false;cards=c.up.slice(i)}
+  else{const c=S.cols[src];if(!c||!c.up.length)return false;cards=c.up.slice()}
   const cat=catOf(cards[0]),hasCat=cards.some(isCat);
   if(dst>=100){const f=dst-100;if(f>=S.found.length)return false;const F=S.found[f];
-    if(!F){if(!hasCat)return false;const ws=cards.filter(c=>!isCat(c));S.found[f]={cat,n:ws.length,last:ws.length?ws.at(-1):null}}
-    else{if(F.cat!==cat)return false;F.n+=cards.length;F.last=cards.at(-1)}
+    if(!F){if(!hasCat)return false;const ws=cards.filter(c=>!isCat(c));S.found[f]={cat,n:ws.length,last:ws.length?ws.at(-1):null};S.gain=ws.length}
+    else{if(F.cat!==cat)return false;F.n+=cards.length;F.last=cards.at(-1);S.gain=cards.length}
     S.hitSlot=f;
-    if(S.found[f].n>=S.k){S.found[f]=null;S.done++;S.justDone=cat}
+    if(S.found[f].n>=S.k){S.found[f]=null;S.done++}
   }else{
     if(dst===src)return false;const t=S.cols[dst];if(!t)return false;
-    if(hasCat&&(cards.length>1||i>0||!t.up.length))return false;
+    if(hasCat&&(cards.length>1||!t.up.length))return false;
     if(t.up.length){const top=t.up.at(-1);if(isCat(top)||catOf(top)!==cat)return false}
     t.up.push(...cards)}
-  if(src<0)S.waste.pop();else{const c=S.cols[src];c.up.length=i;if(!c.up.length&&c.down.length)c.up.push(c.down.pop())}
+  if(src<0)S.waste.pop();else{const c=S.cols[src];c.up.length=0;if(c.down.length)c.up.push(c.down.pop())}
   S.left--;S.used++;return true}
 function options(S){
   const o={A:[],B:[],C:[],D:[],E:[],F:[],G:[]};
@@ -250,120 +296,174 @@ function options(S){
     if(emptyCol>=0&&!hasCat){if(s<0)o.F.push(`m:-1:0:${emptyCol}`);else if(S.cols[s].down.length)o.E.push(`m:${s}:0:${emptyCol}`)}}
   if(S.stock.length||S.waste.length)o.G.push('d');
   return o}
-function playout(deal){
+function playout(deal,r){
   const S=mkState(deal);let idle=0;
-  for(let step=0;step<900;step++){
+  for(let step=0;step<1100;step++){
     if(S.done===S.total)return S.used;
     const o=options(S);let m;
     if(o.A.length)m=o.A[0];
-    else{const busy=o.B.length+o.C.length+o.D.length+o.E.length>0,W={C:5,D:5,B:3,E:2,F:.5,G:busy?.25:1},list=[];let sum=0;
+    else{const busy=o.B.length+o.C.length+o.D.length+o.E.length>0,W={C:5,D:5,B:3,E:2,F:.5,G:busy?.12:1},list=[];let sum=0;
       for(const k in W)for(const x of o[k]){list.push([x,W[k]]);sum+=W[k]}
       if(!list.length)return 0;
       if(list.length===1&&list[0][0]==='d'){if(++idle>S.stock.length+S.waste.length+2)return 0}else idle=0;
-      let r=Math.random()*sum;m=list[list.length-1][0];for(const [x,w] of list){if((r-=w)<0){m=x;break}}}
+      let q=r()*sum;m=list[list.length-1][0];for(const [x,w] of list){if((q-=w)<0){m=x;break}}}
     apply(S,m)}
   return 0}
-/* 步数：每张牌至少要移一次、牌堆里每张至少要翻一次，这是数学下限。再用几百次模拟找出实际能做到的最短解，在它上面加一点余量。 */
-function genDeal(level){
-  const lv=LV[level];let best=null;const N=220;
+function pickCats(lv,r){
+  const pool=shuffle(BANK.map((_,i)=>i),r),ch=[];
+  while(ch.length<lv.cats&&pool.length){
+    let idx=0;
+    if(lv.amb){
+      if(!ch.length){const s=pool.findIndex(x=>LINK[x].size);if(s>=0)idx=s}
+      else{const j=pool.findIndex(x=>ch.some(y=>LINK[y].has(x)));if(j>=0&&r()<.7)idx=j}}
+    else{idx=pool.findIndex(x=>!ch.some(y=>LINK[y].has(x)));if(idx<0)idx=0}
+    ch.push(pool.splice(idx,1)[0])}
+  return ch}
+function pickWords(cats,lv,r){
+  const inD=new Set(cats),used=new Set(),out={};let amb=0;const cap=Math.max(1,Math.ceil(lv.k/3));
+  for(const c of shuffle(cats.slice(),r)){
+    const W=BANK[c].words,ws=shuffle(W.map((_,i)=>i),r).filter(i=>!used.has(W[i].t));
+    const sh=ws.filter(i=>TC[W[i].t].some(o=>o!==c&&inD.has(o))),pl=ws.filter(i=>!sh.includes(i)),take=[];
+    for(const i of sh)if(take.length<cap&&amb<lv.amb){take.push(i);amb++}
+    for(const i of pl)if(take.length<lv.k)take.push(i);
+    for(const i of sh)if(take.length<lv.k&&!take.includes(i)){take.push(i);amb++}
+    if(take.length<lv.k)return null;
+    for(const i of take)used.add(W[i].t);out[c]=take}
+  return out}
+/* 步数：每张牌至少移一次、牌堆每张至少翻一次是数学下限。再用上千次模拟找这副牌实际能走出的最短解，上限只比它多一点点。
+   同一关（variant 0）的牌局是固定的，所以可以反复尝试同一道题。 */
+function genDeal(level,variant){
+  variant=variant|0;const lv=LV[level],r=rngOf((level+1)*7919+variant*104729+17);let best=null;const N=260;
   for(let t=0;t<40;t++){
-    const cats=shuffle(BANK.map((_,i)=>i)).slice(0,lv.cats),codes=[];
-    for(const c of cats){codes.push(c*10);shuffle([0,1,2,3,4,5,6,7]).slice(0,lv.k).forEach(w=>codes.push(c*10+w+1))}
-    shuffle(codes);const cols=[];let p=0;
+    const cats=pickCats(lv,r),pick=pickWords(cats,lv,r);if(!pick)continue;
+    const codes=[];for(const c of cats){codes.push(c*100);for(const w of pick[c])codes.push(c*100+w+1)}
+    shuffle(codes,r);const cols=[];let p=0;
     for(let j=0;j<lv.cols;j++){cols.push(codes.slice(p,p+lv.base+j));p+=lv.base+j}
-    const deal={level,k:lv.k,cats:lv.cats,slots:lv.slots,cols,stock:codes.slice(p),limit:9999};
-    let wins=0,min=1e9;for(let r=0;r<N;r++){const u=playout(deal);if(u){wins++;if(u<min)min=u}}
+    const deal={level,variant,k:lv.k,cats:lv.cats,slots:lv.slots,cols,stock:codes.slice(p),limit:9999};
+    let wins=0,min=1e9;for(let n=0;n<N;n++){const u=playout(deal,r);if(u){wins++;if(u<min)min=u}}
     if(!best||wins>best.wins)best={deal,wins,min};
     if(wins/N>=lv.rate)break}
   const d=best.deal,floor=d.cols.flat().length+d.stock.length*2;
-  if(best.wins)for(let r=0;r<3500&&best.min>floor*1.03;r++){const u=playout(d);if(u&&u<best.min)best.min=u}
-  d.best=best.wins?best.min:floor;d.limit=d.best+Math.max(4,Math.ceil(d.best*lv.slack));
+  if(best.wins)for(let n=0;n<3000&&best.min>floor+1;n++){const u=playout(d,r);if(u&&u<best.min)best.min=u}
+  d.best=best.wins?best.min:floor+20;d.limit=d.best+Math.max(2,Math.round(d.best*lv.slack));
   return d}
 
 /* ---------- 状态 ---------- */
-const $=id=>document.getElementById(id);
+const $=id=>document.getElementById(id),KEY='cp4.';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
-const G={mode:'solo',deal:null,dealStr:'',moves:[],S:null,room:null};
-let HINT=null,POP=false,busy=false,R=null,DR=null;
-let db=null,user=null,uid=null,canWrite=null,roomRef=null,unsub=null,loadT=0,capsReady=false;
-const P2P=!(window.claude&&window.claude.use),PRE='cipai-jielong-';let myId=null,P=null,peer=null,conn=null;
+const G={mode:'solo',deal:null,dealStr:'',moves:[],S:null,room:null,per:1,at:0,who:0,names:['玩家A','玩家B'],score:[0,0]};
+let HINT=null,POP=false,busy=false,R=null,RD=null,DR=null,NET='on',unread=0,seenTs=0,noteTs=0;
+let db=null,user=null,uid=null,canWrite=null,roomRef=null,unsub=null,loadT=0,reT=0,capsReady=false;
+const P2P=!(window.claude&&window.claude.use),PRE='cipai-jielong4-',ROOMS='rooms2/';let myId=null,P=null,peer=null,conn=null;
 
-function rebuild(){G.S=mkState(G.deal);for(const m of G.moves)apply(G.S,m)}
+const clampPer=n=>Math.min(5,Math.max(1,n|0||1));
+const myName=()=>String(store.get('cp.name')||'').slice(0,8);
+function step(m){apply(G.S,m);const o=m.split('@')[1];if(o==='0'||o==='1')G.score[+o]+=G.S.gain}
+function rebuild(){G.S=mkState(G.deal);G.score=[0,0];for(const m of G.moves)step(m)}
 function setDeal(deal,moves){G.deal=deal;G.dealStr=JSON.stringify(deal);G.moves=moves||[];rebuild();HINT=null}
-function save(){if(G.mode!=='online')store.set('cp3.game',{mode:G.mode,deal:G.deal,moves:G.moves})}
+function save(){if(G.mode!=='online')store.set(KEY+'game',{mode:G.mode,deal:G.deal,moves:G.moves,per:G.per,at:G.at,who:G.who,names:G.names})}
+function loadSave(){
+  const s=store.get(KEY+'game');if(!s||!s.deal||!LV[s.deal.level]||!Array.isArray(s.deal.cols))return false;
+  G.mode=s.mode==='local2'?'local2':'solo';G.per=clampPer(s.per);G.at=s.at|0;G.who=s.who?1:0;
+  G.names=Array.isArray(s.names)&&s.names.length===2?s.names.map(x=>String(x).slice(0,8)):['玩家A','玩家B'];
+  setDeal(s.deal,Array.isArray(s.moves)?s.moves:[]);return true}
 function finished(){return G.S.done===G.S.total||G.S.left<=0}
 function me(){return !R||!myId?-1:R.a===myId?0:R.b===myId?1:-1}
-function turn(){return G.moves.length%2}
+function turn(){const q=Math.floor((G.moves.length-G.at)/G.per);return ((G.who+q)%2+2)%2}
+function stepsLeft(){return G.per-((G.moves.length-G.at)%G.per+G.per)%G.per}
 function canAct(quiet){
   if(finished())return false;
   if(G.mode!=='online')return true;
   if(busy)return false;
   const say=t=>{if(!quiet)toast(t)};
+  if(NET==='re'){say('正在重连，稍等');return false}
   if(!R||!R.b){say(me()===0?'等朋友加入后才能开始':'房间还没满员');return false}
   if(me()<0){say('你在观战，不能出牌');return false}
   if(turn()!==me()){say('现在轮到对方');return false}
   return true}
 function legal(m){return apply(structuredClone(G.S),m)}
 
-let toastT;function toast(t){const el=$('toast');el.textContent=t;el.classList.remove('off');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.add('off'),2200)}
+let toastT;function toast(t){const el=$('toast');el.textContent=t;el.classList.remove('off');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.add('off'),2400)}
 
 /* ---------- 出牌 ---------- */
 async function play(m){
   if(!legal(m))return;
   HINT=null;
+  const tag=G.mode==='solo'?m:m+'@'+(G.mode==='online'?me():turn());
+  G.moves.push(tag);step(tag);
   if(G.mode==='online'){
-    busy=true;G.moves.push(m);apply(G.S,m);afterMove();
+    busy=true;afterMove();
     try{await roomWrite({moves:G.moves.slice()})}
     catch(e){toast('这一步没发出去，请再试一次');G.moves.pop();rebuild();render()}
     busy=false;
-  }else{G.moves.push(m);apply(G.S,m);save();afterMove()}}
+  }else{save();afterMove()}}
 function afterMove(){
-  if(G.S.done===G.S.total&&G.mode!=='online'){const w=store.get('cp3.wins')||{};w[G.deal.level]=(w[G.deal.level]||0)+1;store.set('cp3.wins',w)}
+  if(G.S.done===G.S.total&&G.mode!=='online'){const w=store.get(KEY+'wins')||{};w[G.deal.level]=(w[G.deal.level]||0)+1;store.set(KEY+'wins',w)}
   POP=true;render();POP=false}
 async function restart(){
-  if(G.mode==='online'){if(me()<0)return toast('观战中不能操作');try{await roomWrite({moves:[]})}catch(e){toast('操作失败，请重试')}}
-  else{G.moves=[];rebuild();HINT=null;save();render()}}
-async function newDeal(level){
+  if(G.mode==='online'){if(me()<0)return toast('观战中不能操作');try{await roomWrite({moves:[],at:0,who:0})}catch(e){toast('操作失败，请重试')}}
+  else{G.moves=[];G.at=0;G.who=0;rebuild();HINT=null;save();render()}}
+async function getDeal(level,variant){
+  if(!variant){const c=store.get(KEY+'d'+level);if(c&&c.level===level&&Array.isArray(c.cols)&&c.limit)return c}
+  if(level>20){toast('发牌中…');await new Promise(r=>setTimeout(r,40))}
+  const d=genDeal(level,variant);if(!variant)store.set(KEY+'d'+level,d);return d}
+async function newDeal(level,variant){
   if(level==null)level=G.deal.level;
-  const deal=genDeal(level);
-  if(G.mode==='online'){if(me()<0)return toast('观战中不能操作');try{await roomWrite({deal:JSON.stringify(deal),level,moves:[]})}catch(e){toast('操作失败，请重试')}}
-  else{setDeal(deal);save();render()}}
-function undo(){if(G.mode==='online'||!G.moves.length)return;G.moves.pop();rebuild();HINT=null;save();render()}
+  if(G.mode==='online'&&me()<0)return toast('观战中不能操作');
+  const deal=await getDeal(level,variant|0);
+  if(G.mode==='online'){try{await roomWrite({deal:JSON.stringify(deal),moves:[],at:0,who:0})}catch(e){toast('操作失败，请重试')}}
+  else{G.at=0;G.who=0;setDeal(deal);save();render()}}
+function undo(){
+  if(!G.moves.length)return;
+  if(G.mode==='online'){
+    if(busy||+G.moves.at(-1).split('@')[1]!==me())return toast('只能撤回自己刚走的那一步');
+    roomWrite({moves:G.moves.slice(0,-1)}).catch(()=>toast('操作失败，请重试'));return}
+  G.moves.pop();rebuild();HINT=null;save();render()}
 function hint(){
   if(finished())return;const o=options(G.S);
   const m=[...o.A,...o.C,...o.D,...o.B,...o.E,...o.G,...o.F][0];
   if(!m)return;
   HINT=m;render()}
+function setPer(n){
+  n=clampPer(n);if(n===G.per)return;const patch={per:n,at:G.moves.length,who:turn()};
+  if(G.mode==='online'){if(me()<0)return;roomWrite(patch).catch(()=>toast('操作失败，请重试'))}
+  else{Object.assign(G,patch);save();renderBar()}}
+function setMode(m){
+  if(G.mode==='online')leaveRoom();
+  if(G.mode!==m){G.mode=m;G.at=G.moves.length;G.who=0}
+  save();render()}
 
-/* ---------- 拖拽 ---------- */
-function zones(src,i){
+/* ---------- 拖拽：一叠同类的牌永远整叠一起走 ---------- */
+function zones(src){
   const zs=[];
-  document.querySelectorAll('#tab .col').forEach((el,j)=>{if(j!==src&&legal(`m:${src}:${i}:${j}`))zs.push({dst:j,el:el.lastElementChild,r:el.getBoundingClientRect()})});
-  document.querySelectorAll('#found .slot').forEach((el,j)=>{if(legal(`m:${src}:${i}:${100+j}`))zs.push({dst:100+j,el,r:el.getBoundingClientRect()})});
+  document.querySelectorAll('#tab .col').forEach((el,j)=>{if(j!==src&&legal(`m:${src}:0:${j}`))zs.push({dst:j,el:el.lastElementChild,r:el.getBoundingClientRect()})});
+  document.querySelectorAll('#found .slot').forEach((el,j)=>{if(legal(`m:${src}:0:${100+j}`))zs.push({dst:100+j,el,r:el.getBoundingClientRect()})});
   return zs}
 function bestZone(){
-  const c=DR.els[0].getBoundingClientRect();let best=null,area=0;
+  const a=DR.els[0].getBoundingClientRect(),b=DR.els.at(-1).getBoundingClientRect();
+  const c={left:a.left,right:a.right,top:a.top,bottom:b.bottom};let best=null,area=0;
   for(const z of DR.zones){const w=Math.min(c.right,z.r.right+8)-Math.max(c.left,z.r.left-8),h=Math.min(c.bottom,z.r.bottom+8)-Math.max(c.top,z.r.top-8);
     if(w>0&&h>0&&w*h>area){area=w*h;best=z}}
   return best}
 function dragEnd(drop){
   const d=DR;DR=null;if(!d)return;
   if(d.hot)d.hot.el.classList.remove('tgt');
-  if(d.on&&drop&&d.hot)return play(`m:${d.src}:${d.i}:${d.hot.dst}`);
+  if(d.on&&drop&&d.hot)return play(`m:${d.src}:0:${d.hot.dst}`);
   for(const x of d.els){x.classList.remove('drag');x.classList.add('home');x.style.transform='';setTimeout(()=>x.classList.remove('home'),160)}}
 $('app').addEventListener('pointerdown',e=>{
   if(DR||(e.pointerType==='mouse'&&e.button!==0))return;
   const el=e.target.closest('.card[data-z]');if(!el||el.id==='stock')return;
   if(!canAct())return;
-  const z=el.dataset.z;let src=-1,i=0,els=[el];
-  if(z!=='waste'){const p=z.split(':');src=+p[1];i=+p[2];els=[...el.parentNode.querySelectorAll('.card[data-z]')].filter(x=>+x.dataset.z.split(':')[2]>=i)}
-  DR={src,i,els,x:e.clientX,y:e.clientY,id:e.pointerId,on:false,zones:[],hot:null};
+  const z=el.dataset.z;let src=-1,els=[el];
+  if(z!=='waste'){src=+z.split(':')[1];els=[...el.parentNode.querySelectorAll('.card[data-z]')]}
+  DR={src,els,x:e.clientX,y:e.clientY,id:e.pointerId,on:false,zones:[],hot:null};
   try{el.setPointerCapture(e.pointerId)}catch(_){}
   e.preventDefault()});
 $('app').addEventListener('pointermove',e=>{
   if(!DR||e.pointerId!==DR.id)return;
   const dx=e.clientX-DR.x,dy=e.clientY-DR.y;
-  if(!DR.on){if(dx*dx+dy*dy<25)return;DR.on=true;DR.zones=zones(DR.src,DR.i);for(const x of DR.els)x.classList.add('drag')}
+  if(!DR.on){if(dx*dx+dy*dy<25)return;DR.on=true;DR.zones=zones(DR.src);for(const x of DR.els)x.classList.add('drag')}
   const t=`translate(${dx}px,${dy}px)`;for(const x of DR.els)x.style.transform=t;
   const b=bestZone();if(b!==DR.hot){if(DR.hot)DR.hot.el.classList.remove('tgt');if(b)b.el.classList.add('tgt');DR.hot=b}});
 $('app').addEventListener('pointerup',e=>{if(DR&&e.pointerId===DR.id)dragEnd(true)});
@@ -372,21 +472,21 @@ $('app').addEventListener('pointercancel',e=>{if(DR&&e.pointerId===DR.id)dragEnd
 /* ---------- 画面 ---------- */
 function face(code,under){
   const cat=catOf(code);
-  if(isCat(code)){const n=BANK[cat].name;return `<span class="crown">♛</span><span class="lab l${Math.min(n.length,5)}">${n}</span>`}
-  const w=BANK[cat].words[code%10-1],pic=LV[G.deal.level].pic&&w.e;
-  if(under)return pic?`<span class="emo">${w.e}</span>`:`<span class="lab">${w.t}</span>`;
-  return (w.e?`<span class="emo">${w.e}</span>`:'')+(pic?'':`<span class="lab l${Math.min(w.t.length,5)}">${w.t}</span>`)}
+  if(isCat(code)){const n=BANK[cat].name;return (under?'':'<span class="crown">♛</span>')+`<span class="lab l${Math.min(n.length,5)}">${under?'♛ ':''}${n}</span>`}
+  const w=wordOf(code),pic=w.e&&TC[w.t].length===1&&(cat+code%100)%2===0;
+  return pic?`<span class="emo">${w.e}</span>`:`<span class="lab l${Math.min(w.t.length,5)}">${w.t}</span>`}
 function cardEl(code,z,cls,under){
   return `<div class="card ${isCat(code)?'cat ':''}${under?'under ':''}${cls}" data-z="${z}">${face(code,under)}</div>`}
-function render(){
+function render(){renderBoard();renderBar()}
+function renderBoard(){
   if(DR)dragEnd(false);
-  const S=G.S,lv=LV[G.deal.level],act=G.mode!=='online'||(R&&R.b&&me()===turn()&&!finished());
+  const S=G.S,lv=LV[G.deal.level];
   $('app').style.setProperty('--n',Math.max(lv.cols,lv.slots,4));
   $('lvName').textContent=lv.name;
   const tag=$('modeTag');tag.hidden=G.mode==='solo';tag.textContent=G.mode==='local2'?'同屏双人':'联机';
   let mini='';for(let i=0;i<S.total;i++)mini+=`<i class="mini ${i<S.done?'done':''}"></i>`;
   $('prog').innerHTML=mini;$('prog').setAttribute('aria-label',`已集齐 ${S.done} 类，共 ${S.total} 类`);
-  $('left').textContent=Math.max(0,S.left);$('ribbon').classList.toggle('low',S.left<=10);
+  $('left').textContent=Math.max(0,S.left);$('ribbon').classList.toggle('low',S.left<=8);
   let h=null;
   if(HINT){if(HINT==='d')h={stock:1};else{const p=HINT.split(':');h={src:+p[1],dst:+p[3]}}}
   let w='';
@@ -405,150 +505,232 @@ function render(){
     if(!c.up.length)s+=`<div class="emptycol ${h&&h.dst===j?'hint':''}"></div>`;
     s+=c.down.map(()=>`<div class="card back"></div>`).join('');
     c.up.forEach((code,i)=>{const last=i===c.up.length-1;
-      s+=cardEl(code,`c:${j}:${i}`,h&&((h.src===j&&i===0)||(h.dst===j&&last))?'hint ':'',!last)});
+      s+=cardEl(code,`c:${j}:${i}`,h&&(h.src===j||(h.dst===j&&last))?'hint ':'',!last)});
     return s+'</div>'}).join('');
-  const t=$('turn');
-  if(G.mode==='solo')t.hidden=true;
-  else{t.hidden=false;
-    if(G.mode==='local2'){t.className='mine';t.innerHTML=`<span class="who">轮到玩家 ${'AB'[turn()]}</span><span>一人走一步，走完把设备交给对方</span>`}
-    else{const m=me();t.className=act?'mine':'';
-      t.innerHTML=`<span>房间 <b>${G.room}</b> · ${m<0?'观战中':'你是玩家 '+'AB'[m]}</span><span class="who">${!R||!R.b?'等朋友加入…':finished()?'本局结束':m<0?'轮到玩家 '+'AB'[turn()]:act?'轮到你出牌':'等对方出牌…'}</span>`}}
-  $('undoBtn').disabled=G.mode==='online'||!G.moves.length;
-  const over=$('over'),next=G.deal.level<LV.length-1;
+  const last=G.moves.at(-1);
+  $('undoBtn').disabled=!G.moves.length||(G.mode==='online'&&+String(last).split('@')[1]!==me());
+  const over=$('over'),next=G.deal.level<LV.length-1,duo=G.mode==='solo'?'':`<br>${esc(G.names[0])} 归类 ${G.score[0]} 张，${esc(G.names[1])} 归类 ${G.score[1]} 张。`;
   if(S.done===S.total){over.hidden=false;
-    $('overBody').innerHTML=`<h2>${lv.name} 过关！</h2><p>用了 ${S.used} 步，还剩 ${Math.max(0,S.left)} 步。</p><div class="acts">${next?`<button class="btn" data-a="up">下一关</button>`:''}<button class="btn ${next?'alt':''}" data-a="new">再玩这一关</button></div>`}
+    $('overBody').innerHTML=`<h2>${lv.name} 过关！</h2><p>用了 ${S.used} 步，还剩 ${Math.max(0,S.left)} 步。${duo}</p><div class="acts">${next?`<button class="btn" data-a="up">下一关</button>`:''}<button class="btn ${next?'alt':''}" data-a="again">再玩这一关</button></div>`}
   else if(S.left<=0){over.hidden=false;
-    $('overBody').innerHTML=`<h2>步数用完了</h2><p>${lv.name}还差 ${S.total-S.done} 类没集齐。同一副牌可以一直重来。</p><div class="acts"><button class="btn" data-a="again">重来这一局</button><button class="btn alt" data-a="new">换一副牌</button></div>`}
+    $('overBody').innerHTML=`<h2>步数用完了</h2><p>${lv.name}还差 ${S.total-S.done} 类没集齐。牌的位置不变，记住它们再来一次。${duo}</p><div class="acts"><button class="btn" data-a="again">重来这一局</button><button class="btn alt" data-a="new">换一副牌</button></div>`}
   else over.hidden=true}
+function renderBar(){
+  const t=$('turn');
+  if(G.mode==='solo'){t.hidden=true;return}
+  t.hidden=false;
+  const on=G.mode==='online',tu=turn(),fin=finished(),m=me(),ready=!on||!!(R&&R.b),n=stepsLeft();
+  let mid;
+  if(on){const st=NET==='re'?'重连中…':!ready?'等朋友加入…':fin?'本局结束':m<0?`轮到 ${esc(G.names[tu])}`:tu===m?`轮到你 · ${n} 步`:'等对方出牌…';
+    mid=`<span>房间 ${G.room}</span><b>${st}</b>`}
+  else mid=fin?'<b>本局结束</b>':`<b>轮到 ${esc(G.names[tu])}</b><span>还能走 ${n} 步</span>`;
+  const pl=i=>`<div class="pl ${ready&&!fin&&tu===i?'on':''}"><b>${esc(G.names[i])}${on&&m===i?'（你）':''}</b><span>归类 ${G.score[i]} 张</span></div>`;
+  t.innerHTML=pl(0)+`<div class="mid">${mid}</div>`+pl(1)+(on?`<button id="chatBtn" aria-label="聊天">💬${unread?`<i>${unread}</i>`:''}</button>`:'');}
 
 function renderSheet(){
-  const wins=store.get('cp3.wins')||{};
-  let on='';
-  if(!capsReady)on=`<div>正在连接…</div>`;
-  else if(!P2P&&(!db||!uid))on=`<div>联机需要登录 Claude，并在 Claude 里打开这个页面。现在可以先用「同屏双人」一起玩。</div>`;
-  else if(G.mode==='online')on=`<div>当前房间</div><div class="code">${G.room}</div><div>把这个页面的链接和房间号发给朋友。对方打开页面，在这里输入房间号加入。${P2P?'你是房主的话，页面要一直开着。':''}${R&&R.b?'两人都已就位。':'还在等朋友加入。'}</div><div class="line"><button class="btn warn" data-a="leave">离开房间</button></div>`;
-  else on=`${canWrite===false?'<div>你现在只有查看权限，不能创建或加入房间。请页面主人把你的权限改为可以参与（Contributor）。</div>':''}
-    <div>A 走一步，B 再走一步，两人合作清完这副牌。${P2P?'不需要账号，一人创建房间，另一人输入房间号。':''}</div>
+  const wins=store.get(KEY+'wins')||{},on=G.mode==='online';
+  let net='';
+  if(!capsReady)net=`<div>正在连接…</div>`;
+  else if(!P2P&&(!db||!uid))net=`<div>联机需要登录 Claude，并在 Claude 里打开这个页面。现在可以先用「同屏双人」一起玩。</div>`;
+  else if(on)net=`<div>当前房间</div><div class="code">${G.room}</div>
+    <div>${R&&R.b?'两人都已就位。':'还在等朋友加入。'}${P2P?'把邀请链接发给朋友，对方点开就直接进房间。断线或刷新后会自动重连。':'把这个页面和房间号发给朋友，对方在菜单里输入房间号加入。'}</div>
+    <div class="line">${P2P?'<button class="btn" data-a="invite">复制邀请链接</button>':''}<button class="btn warn" data-a="leave">离开房间</button></div><div id="inviteUrl" hidden></div>`;
+  else net=`${!P2P&&canWrite===false?'<div>你现在只有查看权限，不能创建或加入房间。请页面主人把你的权限改为可以参与（Contributor）。</div>':''}
+    <div>两人合作清同一副牌，轮流出牌，可以聊天。${P2P?'不需要账号。':''}</div>
+    <div class="line"><span>我的名字</span><input data-n="me" maxlength="8" value="${esc(myName())}" placeholder="玩家" aria-label="我的名字"></div>
     <div class="line"><button class="btn" data-a="create">创建房间</button></div>
     <div class="line"><input id="roomCode" inputmode="numeric" maxlength="4" placeholder="房间号" aria-label="房间号"><button class="btn alt" data-a="join">加入</button></div>`;
+  const duo=G.mode==='solo'?'':`<div><h3>双人设置</h3><div class="box">
+    <div class="line"><span>每人连走</span><div class="stepper"><button data-a="per" data-d="-1" aria-label="减少">−</button><b>${G.per}</b><button data-a="per" data-d="1" aria-label="增加">＋</button></div><span>步再换人</span></div>
+    ${on?(me()>=0?`<div class="line"><span>我的名字</span><input data-n="me" maxlength="8" value="${esc(myName())}" placeholder="玩家" aria-label="我的名字"></div>`:'')
+      :`<div class="line"><input data-n="0" maxlength="8" value="${esc(G.names[0])}" aria-label="玩家 A 的名字"><input data-n="1" maxlength="8" value="${esc(G.names[1])}" aria-label="玩家 B 的名字"></div>`}
+    </div></div>`;
   $('sheetBody').innerHTML=`<h2>菜单<button class="x" data-a="close" aria-label="关闭">✕</button></h2>
-  <div><h3>选关（共 36 关，越往后牌越多、步数越紧，第 19 关起只看图）</h3><div class="levels">${LV.map((l,i)=>`<button class="chip ${i===G.deal.level?'on':''}" data-a="lv" data-i="${i}" aria-label="${l.name}">${i+1}<small>${wins[i]?'✓':''}</small></button>`).join('')}</div></div>
+  <div><h3>选关（共 60 关，每关的牌是固定的，可以反复挑战）</h3><div class="levels">${LV.map((l,i)=>`<button class="chip ${i===G.deal.level?'on':''}" data-a="lv" data-i="${i}" aria-label="${l.name}">${i+1}<small>${wins[i]?'✓':''}</small></button>`).join('')}</div></div>
   <div><h3>玩法</h3><div class="modes"><button class="chip ${G.mode==='solo'?'on':''}" data-a="mode" data-m="solo">单人<small>自己慢慢想</small></button><button class="chip ${G.mode==='local2'?'on':''}" data-a="mode" data-m="local2">同屏双人<small>一台设备轮流走</small></button></div></div>
-  <div><h3>联机</h3><div class="online">${on}</div></div>
-  <div><h3>怎么玩</h3><ol class="rules"><li>用手指或鼠标拖牌，放不了的地方会自动弹回去。</li><li>带皇冠 ♛ 的黄色牌是类别牌，只能拖进中间的空位，或者盖在同类词语上。盖上以后那一叠就锁住了，只能整叠拖进空位。</li><li>空位里有了类别牌，就把同类的词语拖上去，集齐后空位会腾出来。</li><li>牌列里同一类的词语可以叠在一起，空列可以放词语牌。</li><li>点右上角的牌堆翻新牌。翻牌和移牌都算一步，步数用完前集齐所有类别就过关。</li></ol></div>`}
+  ${duo}
+  <div><h3>联机</h3><div class="box">${net}</div></div>
+  <div><h3>怎么玩</h3><ol class="rules"><li>用手指或鼠标拖牌，放不了的地方会自动弹回去。</li><li>金色带皇冠 ♛ 的是类别牌，拖进中间的空位，再把同类词语拖上去，集齐后空位腾出来。</li><li>牌列里同一类的词语可以叠在一起，叠好的一叠永远整叠一起走。空列可以放词语。</li><li>金色牌也可以盖在牌列里的同类词语上。盖上以后这一叠不能再加牌，只能整叠拖进空位。</li><li>有些词有两个意思，比如「苹果」「小米」「马」，在这副牌里它只属于一个类别，放不上去就说明是另一个。</li><li>点右上角的牌堆翻新牌。翻牌和移牌都算一步，步数很紧，多试几次找出最省步的走法。</li></ol></div>`}
 
-/* ---------- 联机 ---------- */
-async function createRoom(){
-  if(P2P)return p2pCreate();
-  if(canWrite===false)return toast('你没有参与权限，无法创建房间');
-  try{
-    for(let t=0;t<8;t++){
-      const code=String(1000+Math.random()*9000|0),ref=db.doc('rooms/'+code),snap=await ref.get();
-      if(snap.exists&&Date.now()-((snap.data()||{}).ts||0)<12*3600e3)continue;
-      const deal=genDeal(G.deal.level);
-      await ref.set({a:uid,b:'',level:deal.level,deal:JSON.stringify(deal),moves:[],ts:Date.now()});
-      return enter(code)}
-    toast('房间太多了，稍后再试')}
-  catch(e){toast('创建失败：'+(e&&e.code==='invalid_argument'?'你没有写入权限':'请稍后重试'))}}
-async function joinRoom(code,quiet){
-  code=String(code||'').trim();if(!/^\d{4}$/.test(code))return toast('请输入 4 位房间号');
-  if(P2P)return p2pJoin(code);
-  try{
-    const ref=db.doc('rooms/'+code),snap=await ref.get();
-    if(!snap.exists){store.del('cp.room');if(!quiet)toast('没有找到这个房间');return}
-    const d=snap.data();
-    if(d.a!==uid&&d.b!==uid){if(!d.b)await ref.update({b:uid,ts:Date.now()});else if(!quiet)toast('房间已满，你可以观战')}
-    enter(code)}
-  catch(e){if(!quiet)toast('加入失败：'+(e&&e.code==='invalid_argument'?'你没有写入权限':'请稍后重试'))}}
-function enter(code){
-  if(unsub)unsub();
-  G.mode='online';G.room=code;R=null;store.set('cp.room',code);roomRef=db.doc('rooms/'+code);
-  $('sheet').hidden=true;
-  clearTimeout(loadT);loadT=setTimeout(()=>toast('连接有点慢，请检查网络'),10000);
-  unsub=roomRef.onSnapshot(onRoom,()=>{clearTimeout(loadT);toast('和房间的连接断开了');leaveRoom()})}
-function onRoom(snap){
-  clearTimeout(loadT);
-  if(!snap.exists){toast('房间不存在了');return leaveRoom()}
-  applyRoom(snap.data())}
+/* ---------- 聊天（只在联机时有） ---------- */
+function chatList(){
+  const out=[];if(!RD)return out;
+  (RD.ca||[]).forEach(m=>out.push({w:0,t:String(m.t),ts:+m.ts||0}));(RD.cb||[]).forEach(m=>out.push({w:1,t:String(m.t),ts:+m.ts||0}));
+  return out.sort((x,y)=>x.ts-y.ts)}
+function renderChat(){
+  const log=$('chatLog'),L=chatList(),m=me();
+  log.innerHTML=L.length?L.map(x=>`<div class="msg ${x.w===m?'me':''}"><small>${esc(G.names[x.w])}</small><span>${esc(x.t)}</span></div>`).join(''):'<p class="none">还没有消息。想商量怎么走，在这里说。</p>';
+  log.scrollTop=log.scrollHeight}
+function chatIn(first){
+  const L=chatList(),m=me(),other=L.filter(x=>x.w!==m),newest=other.length?other.at(-1).ts:0,open=!$('chat').hidden;
+  if(first){seenTs=noteTs=newest}
+  else if(newest>noteTs){noteTs=newest;if(!open)toast(`${G.names[other.at(-1).w]}：${other.at(-1).t}`)}
+  if(open){seenTs=newest;renderChat()}
+  unread=other.filter(x=>x.ts>seenTs).length}
+function sendChat(t){
+  t=String(t).trim().slice(0,80);const m=me();if(!t||m<0||!RD)return;
+  const key=m?'cb':'ca',arr=[...(RD[key]||[]),{t,ts:Date.now()}].slice(-25);
+  roomWrite({[key]:arr}).catch(()=>toast('消息没发出去'))}
+function openChat(){$('chat').hidden=false;const L=chatList().filter(x=>x.w!==me());seenTs=L.length?L.at(-1).ts:seenTs;unread=0;renderChat();renderBar()}
+$('chatQuick').innerHTML=['该你了','等一下','翻牌吧','先别动那张','好棋！','再来一局'].map(x=>`<button type="button">${x}</button>`).join('');
+$('chatQuick').addEventListener('click',e=>{const b=e.target.closest('button');if(b)sendChat(b.textContent)});
+$('chatForm').addEventListener('submit',e=>{e.preventDefault();sendChat($('chatIn').value);$('chatIn').value=''});
+$('chatClose').onclick=()=>{$('chat').hidden=true};
+$('chat').addEventListener('click',e=>{if(e.target===$('chat'))$('chat').hidden=true});
+$('turn').addEventListener('click',e=>{if(e.target.closest('#chatBtn'))openChat()});
+
+/* ---------- 联机：房间状态是一份小数据，Claude 里存数据库，独立网页里两个浏览器直连 ---------- */
+function goOnline(code,id){myId=id;G.mode='online';G.room=code;R=null;RD=null;NET='on';unread=0;$('sheet').hidden=true}
 function applyRoom(d){
-  const joined=R&&!R.b&&d.b,flip=!R||R.b!==d.b;R={a:d.a,b:d.b};
-  const moves=Array.isArray(d.moves)?d.moves.slice():[];
+  const first=!R,joined=R&&!R.b&&d.b,oldPer=G.per;R={a:d.a,b:d.b};RD=d;
+  G.per=clampPer(d.per);if(G.per!==oldPer&&!$('sheet').hidden)setTimeout(renderSheet,0);G.at=d.at|0;G.who=d.who?1:0;
+  G.names=[String(d.na||'玩家A').slice(0,8),String(d.nb||'玩家B').slice(0,8)];
+  const moves=Array.isArray(d.moves)?d.moves.map(String):[];
   const same=d.deal===G.dealStr&&moves.length===G.moves.length&&moves.every((m,i)=>m===G.moves[i]);
-  if(joined)toast('朋友加入了，可以开始');
-  if(same){if(flip)render();return}
-  if(busy&&d.deal===G.dealStr&&moves.length<G.moves.length)return;
+  if(joined)toast(`${G.names[1]} 进来了，可以开始`);
+  chatIn(first);
+  if(same&&!first)return renderBar();
+  if(busy&&d.deal===G.dealStr&&moves.length<G.moves.length)return renderBar();
   const grew=d.deal===G.dealStr&&moves.length>G.moves.length;
   if(d.deal!==G.dealStr){G.deal=JSON.parse(d.deal);G.dealStr=d.deal}
   G.moves=moves;rebuild();HINT=null;
   POP=grew;render();POP=false}
 async function roomWrite(patch){
-  if(P2P){Object.assign(P,patch);if(conn&&conn.open)conn.send(P);applyRoom(P)}
-  else await roomRef.update({...patch,ts:Date.now()})}
-/* 不用账号的联机：两个浏览器通过 PeerJS 直接相连，房主的页面保存牌局。 */
+  if(!P2P)return roomRef.update({...patch,ts:Date.now()});
+  if(myId==='H'){Object.assign(P,patch);broadcast();applyRoom(P)}
+  else{if(!conn||!conn.open)throw new Error('offline');conn.send({k:'p',patch});Object.assign(P,patch);applyRoom(P)}}
+const fresh=()=>({na:myName(),nb:'',deal:G.dealStr,moves:[],per:G.per,at:0,who:0,ca:[],cb:[]});
+
+/* Claude 页面里的联机 */
+async function createRoom(){
+  if(P2P)return p2pHost();
+  if(canWrite===false)return toast('你没有参与权限，无法创建房间');
+  try{
+    for(let t=0;t<8;t++){
+      const code=String(1000+Math.random()*9000|0),ref=db.doc(ROOMS+code),snap=await ref.get();
+      if(snap.exists&&Date.now()-((snap.data()||{}).ts||0)<12*3600e3)continue;
+      await ref.set({a:uid,b:'',...fresh(),ts:Date.now()});
+      return enter(code)}
+    toast('房间太多了，稍后再试')}
+  catch(e){toast('创建失败：'+(e&&e.code==='invalid_argument'?'你没有写入权限':'请稍后重试'))}}
+async function joinRoom(code,quiet){
+  code=String(code||'').trim();if(!/^\d{4}$/.test(code))return toast('请输入 4 位房间号');
+  if(P2P)return p2pJoin(code,quiet);
+  try{
+    const ref=db.doc(ROOMS+code),snap=await ref.get();
+    if(!snap.exists){store.del('cp.room');if(!quiet)toast('没有找到这个房间');return}
+    const d=snap.data();
+    if(d.a!==uid&&d.b!==uid){if(!d.b)await ref.update({b:uid,nb:myName(),ts:Date.now()});else if(!quiet)toast('房间已满，你可以观战')}
+    enter(code)}
+  catch(e){if(!quiet)toast('加入失败：'+(e&&e.code==='invalid_argument'?'你没有写入权限':'请稍后重试'))}}
+function enter(code){
+  if(unsub)unsub();
+  goOnline(code,uid);store.set('cp.room',code);roomRef=db.doc(ROOMS+code);
+  clearTimeout(loadT);loadT=setTimeout(()=>toast('连接有点慢，请检查网络'),10000);
+  unsub=roomRef.onSnapshot(snap=>{clearTimeout(loadT);if(!snap.exists){toast('房间不存在了');return leaveRoom()}applyRoom(snap.data())},
+    ()=>{clearTimeout(loadT);toast('和房间的连接断开了');leaveRoom()})}
+
+/* 独立网页里的联机：PeerJS 牵线后两个浏览器直连。房主保存牌局并存一份在本机，刷新后用原房间号恢复；客人掉线自动重连。 */
+const ALLOW=['moves','deal','per','at','who','nb','cb'];
 function loadPeer(){return window.Peer?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
-function p2pClose(){try{conn&&conn.close()}catch(e){}try{peer&&peer.destroy()}catch(e){}conn=peer=null;P=null}
-async function p2pCreate(n=0){
+function p2pClose(){clearTimeout(reT);try{conn&&conn.close()}catch(e){}try{peer&&peer.destroy()}catch(e){}conn=peer=null}
+function hostSave(){if(myId==='H'&&P&&G.mode==='online')store.set('cp.host',{code:G.room,P,t:Date.now()})}
+function broadcast(){if(conn&&conn.open)try{conn.send({k:'s',P})}catch(e){}hostSave()}
+async function p2pHost(code,restore,n){
+  n=n|0;
   try{await loadPeer()}catch(e){return toast('联机组件没加载出来，请检查网络')}
-  const code=String(1000+Math.random()*9000|0);toast('正在创建房间…');
-  peer=new Peer(PRE+code);
-  peer.on('open',()=>{P={a:'H',b:'',deal:JSON.stringify(genDeal(G.deal.level)),moves:[]};myId='H';G.mode='online';G.room=code;R=null;$('sheet').hidden=true;applyRoom(P);toast('房间号 '+code+'，发给朋友')});
-  peer.on('connection',c=>{
-    if(conn&&conn.open){c.on('open',()=>c.close());return}
+  if(!code)code=String(1000+Math.random()*9000|0);
+  if(!restore&&!n)toast('正在创建房间…');
+  const pr=peer=new Peer(PRE+code);
+  pr.on('open',()=>{if(peer!==pr)return;
+    P=restore||{a:'H',...fresh()};P.b='';
+    goOnline(code,'H');applyRoom(P);hostSave();
+    if(!restore)toast('房间 '+code+' 建好了，在菜单里复制邀请链接发给朋友')});
+  pr.on('connection',c=>{
+    if(conn&&conn.open){c.on('open',()=>{try{c.send({k:'full'})}catch(e){}setTimeout(()=>{try{c.close()}catch(e){}},400)});return}
     conn=c;
-    c.on('open',()=>{if(!P)return;P.b='G';c.send(P);applyRoom(P)});
-    c.on('data',d=>{if(!P||!d||typeof d.deal!=='string')return;P={deal:d.deal,moves:d.moves,a:'H',b:'G'};applyRoom(P)});
-    c.on('close',()=>{if(conn===c){conn=null;if(P){P.b='';toast('对方离开了');applyRoom(P)}}})});
-  peer.on('error',e=>{if(e.type==='unavailable-id'&&n<5){try{peer.destroy()}catch(_){}p2pCreate(n+1)}else if(G.mode!=='online'){toast('创建失败，请稍后重试');p2pClose()}})}
-async function p2pJoin(code){
+    c.on('open',()=>{if(!P||conn!==c)return;P.b='G';broadcast();applyRoom(P)});
+    c.on('data',d=>{if(!P||conn!==c||!d||d.k!=='p'||!d.patch||typeof d.patch!=='object')return;
+      for(const k of ALLOW)if(k in d.patch)P[k]=d.patch[k];broadcast();applyRoom(P)});
+    c.on('close',()=>{if(conn!==c)return;conn=null;if(P&&G.mode==='online'){P.b='';toast('对方掉线了，等他回来');applyRoom(P);hostSave()}})});
+  pr.on('disconnected',()=>{if(peer===pr)try{pr.reconnect()}catch(e){}});
+  pr.on('error',e=>{if(peer!==pr)return;
+    if(e&&e.type==='unavailable-id'){try{pr.destroy()}catch(_){}peer=null;
+      if(restore&&n<6)reT=setTimeout(()=>p2pHost(code,restore,n+1),2500);
+      else if(!restore&&n<5)p2pHost(null,null,n+1);
+      else{toast('房间没能恢复，请重新创建');store.del('cp.host')}}
+    else if(G.mode!=='online'){toast('创建失败，请稍后重试');p2pClose()}})}
+async function p2pJoin(code,quiet,n){
+  n=n|0;
   try{await loadPeer()}catch(e){return toast('联机组件没加载出来，请检查网络')}
-  toast('正在连接…');let done=false;
-  const fail=t=>{if(done)return;done=true;clearTimeout(timer);toast(t);p2pClose()};
-  const timer=setTimeout(()=>fail('没连上。请确认房间号，并且房主的页面还开着'),15000);
-  peer=new Peer();
-  peer.on('open',()=>{
-    conn=peer.connect(PRE+code,{reliable:true,serialization:'json'});
-    conn.on('data',d=>{if(!d||typeof d.deal!=='string')return;
-      if(!done){done=true;clearTimeout(timer);myId='G';G.mode='online';G.room=code;R=null;$('sheet').hidden=true}
-      P=d;applyRoom(P)});
-    conn.on('close',()=>{if(G.mode==='online'&&myId==='G'){toast('和房主的连接断开了');leaveRoom()}})});
-  peer.on('error',e=>{if(G.mode==='online')return;fail(e.type==='peer-unavailable'?'没有找到这个房间':'连接失败，请稍后重试')})}
+  if(!quiet&&!n)toast('正在连接…');
+  let got=false,dead=false;const pr=peer=new Peer();
+  const lost=()=>{if(dead||peer!==pr)return;dead=true;clearTimeout(timer);try{pr.destroy()}catch(e){}peer=conn=null;
+    if(G.mode==='online'&&myId==='G'){const k=got?0:n+1;if(k>30){toast('连不上房主了');return leaveRoom()}
+      NET='re';renderBar();reT=setTimeout(()=>p2pJoin(code,true,k),2500)}
+    else if(n<2)reT=setTimeout(()=>p2pJoin(code,quiet,n+1),1500);
+    else{store.del('cp.guest');if(!quiet)toast('没连上。请确认房间号，并且房主的页面还开着')}};
+  const timer=setTimeout(()=>{if(!got)lost()},12000);
+  pr.on('open',()=>{if(peer!==pr)return;
+    const c=conn=pr.connect(PRE+code,{reliable:true,serialization:'json'});
+    c.on('data',d=>{if(!d||peer!==pr)return;
+      if(d.k==='full'){dead=true;clearTimeout(timer);toast('房间已经满了');store.del('cp.guest');if(G.mode==='online')leaveRoom();else p2pClose();return}
+      if(d.k!=='s'||!d.P||typeof d.P.deal!=='string')return;
+      const first=!got;got=true;clearTimeout(timer);
+      if(G.mode!=='online')goOnline(code,'G');NET='on';store.set('cp.guest',code);
+      P=d.P;applyRoom(P);
+      if(first&&myName()&&P.nb!==myName())roomWrite({nb:myName()}).catch(()=>{})});
+    c.on('close',lost)});
+  pr.on('error',lost)}
 function leaveRoom(){
-  if(P2P)p2pClose();
-  if(unsub)unsub();unsub=null;roomRef=null;R=null;G.room=null;store.del('cp.room');
-  const s=store.get('cp3.game');G.mode=s&&s.mode==='local2'?'local2':'solo';
-  if(s&&s.deal)setDeal(s.deal,s.moves);else setDeal(genDeal(0));
+  if(P2P){p2pClose();P=null;store.del('cp.host');store.del('cp.guest')}
+  if(unsub)unsub();unsub=null;roomRef=null;R=null;RD=null;G.room=null;NET='on';unread=0;store.del('cp.room');myId=P2P?null:uid;
+  $('chat').hidden=true;
+  if(!loadSave()){G.mode='solo';G.per=1;G.at=0;G.who=0;G.names=['玩家A','玩家B'];setDeal(genDeal(0,0))}
   render()}
+function invite(){
+  const url=location.href.split('#')[0]+'#r'+G.room,show=()=>{const el=$('inviteUrl');if(el){el.hidden=false;el.textContent=url}};
+  try{navigator.clipboard.writeText(url).then(()=>toast('邀请链接已复制'),show)}catch(e){show()}}
 
 /* ---------- 事件 ---------- */
 $('app').addEventListener('click',e=>{if(e.target.closest('#stock')&&canAct())play('d')});
 $('menuBtn').onclick=()=>{renderSheet();$('sheet').hidden=false};
-$('hintBtn').onclick=hint;$('undoBtn').onclick=undo;$('againBtn').onclick=restart;$('newBtn').onclick=()=>newDeal();
+$('hintBtn').onclick=hint;$('undoBtn').onclick=undo;$('againBtn').onclick=restart;$('newBtn').onclick=()=>newDeal(null,1+(Math.random()*1e6|0));
 $('sheet').addEventListener('click',e=>{
   if(e.target===$('sheet'))return void($('sheet').hidden=true);
   const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
   if(a==='close')$('sheet').hidden=true;
-  else if(a==='lv'){$('sheet').hidden=true;newDeal(+b.dataset.i)}
-  else if(a==='mode'){if(G.mode==='online')leaveRoom();G.mode=b.dataset.m;save();$('sheet').hidden=true;render()}
+  else if(a==='lv'){$('sheet').hidden=true;newDeal(+b.dataset.i,0)}
+  else if(a==='mode'){setMode(b.dataset.m);renderSheet()}
+  else if(a==='per'){setPer(G.per+ +b.dataset.d);if(G.mode!=='online')renderSheet()}
   else if(a==='create')createRoom();
   else if(a==='join')joinRoom($('roomCode').value);
+  else if(a==='invite')invite();
   else if(a==='leave'){leaveRoom();$('sheet').hidden=true}});
+$('sheet').addEventListener('change',e=>{
+  const el=e.target.closest('[data-n]');if(!el)return;const v=el.value.trim().slice(0,8);
+  if(el.dataset.n==='me'){store.set('cp.name',v);const m=me();if(G.mode==='online'&&m>=0)roomWrite({[m?'nb':'na']:v}).catch(()=>{})}
+  else{G.names[+el.dataset.n]=v||'玩家'+'AB'[+el.dataset.n];save();renderBar()}});
 $('over').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;
-  if(b.dataset.a==='again')restart();else if(b.dataset.a==='new')newDeal();else newDeal(G.deal.level+1)});
+  if(b.dataset.a==='again')restart();else if(b.dataset.a==='new')newDeal(null,1+(Math.random()*1e6|0));else newDeal(G.deal.level+1,0)});
 
 /* ---------- 启动 ---------- */
 (function start(){
-  const s=store.get('cp3.game');
-  if(s&&s.deal&&LV[s.deal.level]){G.mode=s.mode==='local2'?'local2':'solo';setDeal(s.deal,s.moves)}
-  else{setDeal(genDeal(0));save()}
+  if(!loadSave()){setDeal(genDeal(0,0));save()}
   render();
   (async()=>{
-    try{
-      if(window.claude&&window.claude.use){db=await window.claude.use('db');user=await window.claude.use('user');
-        if(user){uid=await user.id();canWrite=await user.can('data.write')}}
-      myId=uid;
-    }catch(e){}
-    capsReady=true;if(!$('sheet').hidden)renderSheet();
-    const code=store.get('cp.room');if(!P2P&&db&&uid&&code)joinRoom(code,true)})()})();
+    if(P2P){
+      capsReady=true;
+      const h=(location.hash.match(/^#r(\d{4})$/)||[])[1],host=store.get('cp.host'),alive=host&&host.P&&Date.now()-host.t<6*3600e3;
+      if(h){try{history.replaceState(null,'',location.href.split('#')[0])}catch(e){}}
+      if(h&&!(alive&&host.code===h))p2pJoin(h);
+      else if(alive)p2pHost(host.code,host.P);
+      else{const g=store.get('cp.guest');if(g)p2pJoin(String(g),true)}
+      return}
+    try{db=await window.claude.use('db');user=await window.claude.use('user');
+      if(user){uid=await user.id();canWrite=await user.can('data.write')}}catch(e){}
+    myId=uid;capsReady=true;if(!$('sheet').hidden)renderSheet();
+    const code=store.get('cp.room');if(db&&uid&&code)joinRoom(code,true)})()})();
 </script>
 </body>
 </html>
