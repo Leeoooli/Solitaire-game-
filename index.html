@@ -148,6 +148,7 @@ footer button:disabled{opacity:.4;cursor:default}
 .btn{background:var(--felt);color:#fff;border-radius:12px;padding:10px 16px;font-weight:700;font-size:15px}
 .btn.alt{background:#ece8da;color:var(--ink)}
 .box .btn.alt{background:#fff;box-shadow:0 0 0 1.5px var(--paper-edge) inset}
+.presets .btn{padding:6px 0;min-width:38px;font-size:14px}
 .btn.warn{background:#fff;color:var(--rose);box-shadow:0 0 0 1.5px var(--rose) inset}
 .code{font-family:var(--display);font-size:34px;letter-spacing:.18em;color:var(--felt-deep);line-height:1}
 #inviteUrl{font-size:12px;word-break:break-all;background:#fff;border-radius:8px;padding:6px 8px}
@@ -357,7 +358,7 @@ let HINT=null,POP=false,busy=false,R=null,RD=null,DR=null,NET='on',unread=0,seen
 let db=null,user=null,uid=null,canWrite=null,roomRef=null,unsub=null,loadT=0,reT=0,capsReady=false;
 const P2P=!(window.claude&&window.claude.use),PRE='cipai-jielong4-',ROOMS='rooms2/';let myId=null,P=null,peer=null,conn=null;
 
-const clampPer=n=>Math.min(5,Math.max(1,n|0||1));
+const clampPer=n=>Math.min(20,Math.max(1,n|0||1));
 const myName=()=>String(store.get('cp.name')||'').slice(0,8);
 function step(m){apply(G.S,m);const o=m.split('@')[1];if(o==='0'||o==='1')G.score[+o]+=G.S.gain}
 function rebuild(){G.S=mkState(G.deal);G.score=[0,0];for(const m of G.moves)step(m)}
@@ -542,6 +543,7 @@ function renderSheet(){
     <div class="line"><input id="roomCode" inputmode="numeric" maxlength="4" placeholder="房间号" aria-label="房间号"><button class="btn alt" data-a="join">加入</button></div>`;
   const duo=G.mode==='solo'?'':`<div><h3>双人设置</h3><div class="box">
     <div class="line"><span>每人连走</span><div class="stepper"><button data-a="per" data-d="-1" aria-label="减少">−</button><b>${G.per}</b><button data-a="per" data-d="1" aria-label="增加">＋</button></div><span>步再换人</span></div>
+    <div class="line presets">${[1,2,3,5,10,15,20].map(v=>`<button class="btn alt" data-a="perset" data-v="${v}">${v}</button>`).join('')}</div>
     ${on?(me()>=0?`<div class="line"><span>我的名字</span><input data-n="me" maxlength="8" value="${esc(myName())}" placeholder="玩家" aria-label="我的名字"></div>`:'')
       :`<div class="line"><input data-n="0" maxlength="8" value="${esc(G.names[0])}" aria-label="玩家 A 的名字"><input data-n="1" maxlength="8" value="${esc(G.names[1])}" aria-label="玩家 B 的名字"></div>`}
     </div></div>`;
@@ -702,7 +704,7 @@ $('sheet').addEventListener('click',e=>{
   if(a==='close')$('sheet').hidden=true;
   else if(a==='lv'){$('sheet').hidden=true;newDeal(+b.dataset.i,0)}
   else if(a==='mode'){setMode(b.dataset.m);renderSheet()}
-  else if(a==='per'){setPer(G.per+ +b.dataset.d);if(G.mode!=='online')renderSheet()}
+  else if(a==='per'||a==='perset'){setPer(a==='per'?G.per+ +b.dataset.d:+b.dataset.v);if(G.mode!=='online')renderSheet()}
   else if(a==='create')createRoom();
   else if(a==='join')joinRoom($('roomCode').value);
   else if(a==='invite')invite();
