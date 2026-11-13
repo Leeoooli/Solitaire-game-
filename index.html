@@ -195,7 +195,7 @@ footer button:disabled{opacity:.4;cursor:default}
   <h2>聊天<button class="x" id="chatClose" aria-label="关闭">✕</button></h2>
   <div id="chatLog"></div>
   <div class="quick" id="chatQuick"></div>
-  <form id="chatForm"><input id="chatIn" maxlength="80" placeholder="说点什么…" autocomplete="off" aria-label="消息"><button class="btn">发送</button></form>
+  <form id="chatForm"><input id="chatIn" maxlength="60" placeholder="说点什么…" autocomplete="off" aria-label="消息"><button class="btn">发送</button></form>
 </div></div>
 <div id="over" class="scrim" hidden><div class="panel" id="overBody"></div></div>
 <div id="toast" class="off" role="status"></div>
@@ -356,7 +356,7 @@ const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){retu
 const G={mode:'solo',deal:null,dealStr:'',moves:[],S:null,room:null,per:1,at:0,who:0,names:['玩家A','玩家B'],score:[0,0]};
 let HINT=null,POP=false,busy=false,R=null,RD=null,DR=null,NET='on',unread=0,seenTs=0,noteTs=0;
 let db=null,user=null,uid=null,canWrite=null,roomRef=null,unsub=null,loadT=0,reT=0,capsReady=false;
-const P2P=!(window.claude&&window.claude.use),PRE='cipai-jielong4-',ROOMS='rooms2/';let myId=null,P=null,peer=null,conn=null;
+const P2P=!(window.claude&&window.claude.use),PRE='cipai-jielong4-',ROOMS='rooms2/';let myId=null,P=null,peer=null,conn=null,GEN=0;
 
 const clampPer=n=>Math.min(20,Math.max(1,n|0||1));
 const myName=()=>String(store.get('cp.name')||'').slice(0,8);
@@ -570,8 +570,8 @@ function chatIn(first){
   if(open){seenTs=newest;renderChat()}
   unread=other.filter(x=>x.ts>seenTs).length}
 function sendChat(t){
-  t=String(t).trim().slice(0,80);const m=me();if(!t||m<0||!RD)return;
-  const key=m?'cb':'ca',arr=[...(RD[key]||[]),{t,ts:Date.now()}].slice(-25);
+  t=String(t).trim().slice(0,60);const m=me();if(!t||m<0||!RD)return;
+  const key=m?'cb':'ca',arr=[...(RD[key]||[]),{t,ts:Date.now()}].slice(-15);
   roomWrite({[key]:arr}).catch(()=>toast('消息没发出去'))}
 function openChat(){$('chat').hidden=false;const L=chatList().filter(x=>x.w!==me());seenTs=L.length?L.at(-1).ts:seenTs;unread=0;renderChat();renderBar()}
 $('chatQuick').innerHTML=['该你了','等一下','翻牌吧','先别动那张','好棋！','再来一局'].map(x=>`<button type="button">${x}</button>`).join('');
@@ -638,15 +638,17 @@ function loadPeer(){return window.Peer?Promise.resolve():new Promise((ok,no)=>{c
 function p2pClose(){clearTimeout(reT);try{conn&&conn.close()}catch(e){}try{peer&&peer.destroy()}catch(e){}conn=peer=null}
 function hostSave(){if(myId==='H'&&P&&G.mode==='online')store.set('cp.host',{code:G.room,P,t:Date.now()})}
 function broadcast(){if(conn&&conn.open)try{conn.send({k:'s',P})}catch(e){}hostSave()}
-async function p2pHost(code,restore,n){
-  n=n|0;
+const netWhy=t=>t==='network'||t==='server-error'||t==='socket-error'||t==='socket-closed'?'牵线服务暂时连不上，过一会儿再试':'出错了（'+(t||'未知')+'），请稍后重试';
+async function p2pHost(code,restore,n,g){
+  n=n|0;if(g==null){g=++GEN;p2pClose()}else if(g!==GEN)return;
   try{await loadPeer()}catch(e){return toast('联机组件没加载出来，请检查网络')}
+  if(g!==GEN)return;
   if(!code)code=String(1000+Math.random()*9000|0);
   if(!restore&&!n)toast('正在创建房间…');
   const pr=peer=new Peer(PRE+code);
   pr.on('open',()=>{if(peer!==pr)return;
     P=restore||{a:'H',...fresh()};P.b='';
-    goOnline(code,'H');applyRoom(P);hostSave();
+    goOnline(code,'H');applyRoom(P);hostSave();store.del('cp.guest');
     if(!restore)toast('房间 '+code+' 建好了，在菜单里复制邀请链接发给朋友')});
   pr.on('connection',c=>{
     if(conn&&conn.open){c.on('open',()=>{try{c.send({k:'full'})}catch(e){}setTimeout(()=>{try{c.close()}catch(e){}},400)});return}
@@ -658,33 +660,35 @@ async function p2pHost(code,restore,n){
   pr.on('disconnected',()=>{if(peer===pr)try{pr.reconnect()}catch(e){}});
   pr.on('error',e=>{if(peer!==pr)return;
     if(e&&e.type==='unavailable-id'){try{pr.destroy()}catch(_){}peer=null;
-      if(restore&&n<6)reT=setTimeout(()=>p2pHost(code,restore,n+1),2500);
-      else if(!restore&&n<5)p2pHost(null,null,n+1);
+      if(restore&&n<6)reT=setTimeout(()=>p2pHost(code,restore,n+1,g),2500);
+      else if(!restore&&n<5)p2pHost(null,null,n+1,g);
       else{toast('房间没能恢复，请重新创建');store.del('cp.host')}}
-    else if(G.mode!=='online'){toast('创建失败，请稍后重试');p2pClose()}})}
-async function p2pJoin(code,quiet,n){
-  n=n|0;
+    else if(G.mode!=='online'){if(!restore)toast('创建失败：'+netWhy(e&&e.type));p2pClose()}})}
+async function p2pJoin(code,quiet,n,g){
+  n=n|0;if(g==null){g=++GEN;p2pClose()}else if(g!==GEN)return;
   try{await loadPeer()}catch(e){return toast('联机组件没加载出来，请检查网络')}
+  if(g!==GEN)return;
   if(!quiet&&!n)toast('正在连接…');
-  let got=false,dead=false;const pr=peer=new Peer();
-  const lost=()=>{if(dead||peer!==pr)return;dead=true;clearTimeout(timer);try{pr.destroy()}catch(e){}peer=conn=null;
+  let got=false,dead=false,sig=false,why='';const pr=peer=new Peer();
+  const lost=e=>{if(dead||peer!==pr)return;if(e&&e.type)why=e.type;dead=true;clearTimeout(timer);try{pr.destroy()}catch(e){}peer=conn=null;
     if(G.mode==='online'&&myId==='G'){const k=got?0:n+1;if(k>30){toast('连不上房主了');return leaveRoom()}
-      NET='re';renderBar();reT=setTimeout(()=>p2pJoin(code,true,k),2500)}
-    else if(n<2)reT=setTimeout(()=>p2pJoin(code,quiet,n+1),1500);
-    else{store.del('cp.guest');if(!quiet)toast('没连上。请确认房间号，并且房主的页面还开着')}};
+      NET='re';renderBar();reT=setTimeout(()=>p2pJoin(code,true,k,g),2500)}
+    else if(n<2)reT=setTimeout(()=>p2pJoin(code,quiet,n+1,g),1500);
+    else{store.del('cp.guest');if(!quiet)toast(why==='peer-unavailable'?`没找到房间 ${code}：房间号不对，或者房主的页面没开着`:sig?'找到房间了，但两台设备之间打不通，多半是网络限制，换个网络（比如手机热点）再试':netWhy(why))}};
   const timer=setTimeout(()=>{if(!got)lost()},12000);
-  pr.on('open',()=>{if(peer!==pr)return;
+  pr.on('open',()=>{if(peer!==pr)return;sig=true;
     const c=conn=pr.connect(PRE+code,{reliable:true,serialization:'json'});
     c.on('data',d=>{if(!d||peer!==pr)return;
       if(d.k==='full'){dead=true;clearTimeout(timer);toast('房间已经满了');store.del('cp.guest');if(G.mode==='online')leaveRoom();else p2pClose();return}
       if(d.k!=='s'||!d.P||typeof d.P.deal!=='string')return;
       const first=!got;got=true;clearTimeout(timer);
-      if(G.mode!=='online')goOnline(code,'G');NET='on';store.set('cp.guest',code);
+      if(G.mode!=='online')goOnline(code,'G');NET='on';store.set('cp.guest',code);store.del('cp.host');
       P=d.P;applyRoom(P);
       if(first&&myName()&&P.nb!==myName())roomWrite({nb:myName()}).catch(()=>{})});
     c.on('close',lost)});
   pr.on('error',lost)}
 function leaveRoom(){
+  GEN++;
   if(P2P){p2pClose();P=null;store.del('cp.host');store.del('cp.guest')}
   if(unsub)unsub();unsub=null;roomRef=null;R=null;RD=null;G.room=null;NET='on';unread=0;store.del('cp.room');myId=P2P?null:uid;
   $('chat').hidden=true;
